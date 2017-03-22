@@ -1,20 +1,47 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CoreTestPl.Services;
+using CoreTestPl.WievModels;
+using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CoreTestPl.Controllers
 {
     public class HomeController : Controller
     {
-        public string Index()
+        private IRestaurantData restaurantData;
+        private IGreeter greeter;
+
+        public HomeController(IRestaurantData restaurantData, IGreeter greeter)
         {
-            return "Hello Stefan";
+            if (restaurantData == null)
+            {
+                throw new ArgumentException(nameof(restaurantData));
+            }
+            if (greeter == null)
+            {
+                throw new ArgumentException(nameof(greeter));
+            }
+            this.restaurantData = restaurantData;
+            this.greeter = greeter;   
         }
-        //IActionResult Index()
-        //{
-        //    return View();
-        //}
+        public IActionResult Index()
+        {
+            var model = new HomePageViewModel()
+            {
+                Restaurants = restaurantData.GetAll(),
+                CurrentMessageOfTheDay = greeter.GetGreeting()           
+            };
+
+            return View(model);
+        }
+
+        public IActionResult Details(int id)
+        {
+            var model = restaurantData.Get(id);
+            if (model == null)
+            {
+                return NotFound();
+            }
+            return View(model);
+        }
     }
 }

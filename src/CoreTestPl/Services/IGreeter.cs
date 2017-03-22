@@ -1,4 +1,4 @@
-﻿namespace CoreTestPl
+﻿namespace CoreTestPl.Services
 {
     public interface IGreeter
     {

@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Routing;
+using CoreTestPl.Services;
 
 namespace CoreTestPl
 {
@@ -32,6 +33,7 @@ namespace CoreTestPl
         {
             services.AddSingleton(Configuration);
             services.AddSingleton<IGreeter, Greeter>();
+            services.AddScoped<IRestaurantData, InMemoryRestaurantData>();
             services.AddMvc();
         }
 
@@ -42,6 +44,16 @@ namespace CoreTestPl
             IGreeter greeter)
         {
             loggerFactory.AddConsole();
+
+            app.Use(async (context, next) =>
+            {
+                await next();
+                if (context.Response.StatusCode == 404)
+                {
+                    context.Request.Path = "/Home";
+                    await next();
+                }
+            });
 
             if (env.IsDevelopment())
             {
@@ -56,6 +68,7 @@ namespace CoreTestPl
             }
 
             app.UseFileServer();
+            app.UseMvcWithDefaultRoute();
 
             app.UseMvc(ConfigureRoutes);
 
