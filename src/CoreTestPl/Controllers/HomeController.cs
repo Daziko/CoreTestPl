@@ -1,4 +1,5 @@
-﻿using CoreTestPl.Services;
+﻿using CoreTestPl.Entities;
+using CoreTestPl.Services;
 using CoreTestPl.WievModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -42,6 +43,24 @@ namespace CoreTestPl.Controllers
                 return NotFound();
             }
             return View(model);
+        }
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(RestaurantEditViewModel model )
+        {
+            var newRestaurant = new Restaurant
+            {
+                Cuisine = model.Cuisine,
+                Name = model.Name
+            };
+
+            newRestaurant = restaurantData.Add(newRestaurant);
+            return View("Details", newRestaurant);
         }
     }
 }

@@ -8,8 +8,8 @@ namespace CoreTestPl.Services
 {
     public class InMemoryRestaurantData : IRestaurantData
     {
-        private List<Restaurant> restaurants;
-        public InMemoryRestaurantData()
+        private static List<Restaurant> restaurants;
+        static InMemoryRestaurantData()
         {
             restaurants = new List<Restaurant>
             {
@@ -17,6 +17,14 @@ namespace CoreTestPl.Services
                 new Restaurant {Id = 2, Name = "Nervosa" },
                 new Restaurant {Id = 3, Name = "Budha" }
             };
+        }
+
+        public Restaurant Add(Restaurant newRestaurant)
+        {
+            newRestaurant.Id = restaurants.Max(r => r.Id) + 1;
+            restaurants.Add(newRestaurant);
+
+            return newRestaurant;
         }
 
         public Restaurant Get(int id)
