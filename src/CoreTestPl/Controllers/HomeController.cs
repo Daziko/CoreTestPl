@@ -51,16 +51,23 @@ namespace CoreTestPl.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(RestaurantEditViewModel model )
         {
-            var newRestaurant = new Restaurant
+            if (ModelState.IsValid)
             {
-                Cuisine = model.Cuisine,
-                Name = model.Name
-            };
+                var newRestaurant = new Restaurant
+                {
+                    Cuisine = model.Cuisine,
+                    Name = model.Name
+                };
 
-            newRestaurant = restaurantData.Add(newRestaurant);
-            return View("Details", newRestaurant);
+                newRestaurant = restaurantData.Add(newRestaurant);
+
+                return RedirectToAction("Details", new { id = newRestaurant.Id });
+            }
+
+            return View();
         }
     }
 }
