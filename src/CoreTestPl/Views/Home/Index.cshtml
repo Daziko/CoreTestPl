@@ -1,21 +1,27 @@
-﻿@model CoreTestPl.WievModels.HomePageViewModel
+﻿@model HomePageViewModel
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title>Restaurans</title>
-</head>
-<body>
-    <h1>@Model.CurrentMessageOfTheDay</h1> 
-    <table>
-        @foreach (var restaurant in Model.Restaurants)
-        {
-            <tr>
-                <td>@restaurant.Id</td>
-                <td>@restaurant.Name</td>
-            </tr>
-            
-        }
-    </table>
-   
-</body>
-</html>
+@{
+    ViewData["Title"] = "Home";
+}
+
+<h1>Wellcome</h1>
+<br />
+<table>
+    @foreach (var restaurant in Model.Restaurants)
+    {
+        <tr>
+            <td>
+                <a href="home/details/@restaurant.Id">Detail</a>
+                @Html.ActionLink("View", "Details", new { id = restaurant.Id })
+            </td>
+            <td>
+                @restaurant.Name
+            </td>
+        </tr>
+
+    }
+</table>
+
+@section footer{
+    <h3>@Model.CurrentMessageOfTheDay</h3>
+}
