@@ -10,7 +10,7 @@ namespace CoreTestPl.Services
         readonly OdeToFoodDbContext context;
         public SqlRestaurantData(OdeToFoodDbContext context)
         {
-
+            this.context = context;
         }
         public Restaurant Add(Restaurant newRestaurant)
         {

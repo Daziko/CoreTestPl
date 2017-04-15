@@ -10,6 +10,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Routing;
 using CoreTestPl.Services;
+using CoreTestPl.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace CoreTestPl
 {
@@ -33,8 +35,9 @@ namespace CoreTestPl
         {
             services.AddSingleton(Configuration);
             services.AddSingleton<IGreeter, Greeter>();
-            services.AddScoped<IRestaurantData, InMemoryRestaurantData>();
+            services.AddScoped<IRestaurantData, SqlRestaurantData>();
             services.AddMvc();
+            services.AddDbContext<OdeToFoodDbContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("OdeToFood")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
