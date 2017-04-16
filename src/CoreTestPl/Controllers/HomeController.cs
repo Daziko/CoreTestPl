@@ -63,11 +63,45 @@ namespace CoreTestPl.Controllers
                 };
 
                 newRestaurant = restaurantData.Add(newRestaurant);
+                restaurantData.Comit();
 
                 return RedirectToAction("Details", new { id = newRestaurant.Id });
             }
 
             return View();
+        }
+
+        [HttpGet]
+        public  IActionResult Edit(int id)
+        {
+            var model = restaurantData.Get(id);
+            if (model == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, RestaurantEditViewModel model)
+        {
+            var restaurant = restaurantData.Get(id);
+            if (restaurant == null)
+            {
+                return RedirectToAction("Index");
+            }
+            if (ModelState.IsValid)
+            {
+                restaurant.Cuisine = model.Cuisine;
+                restaurant.Name = model.Name;
+                restaurantData.Comit();
+
+                return RedirectToAction("Details", new { id = restaurant.Id });
+            }
+
+            return View(restaurant);
         }
     }
 }

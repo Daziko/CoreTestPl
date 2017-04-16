@@ -15,8 +15,12 @@ namespace CoreTestPl.Services
         public Restaurant Add(Restaurant newRestaurant)
         {
             context.Add(newRestaurant);
-            context.SaveChanges();
             return newRestaurant;
+        }
+
+        public void Comit()
+        {
+            context.SaveChanges();
         }
 
         public Restaurant Get(int id)

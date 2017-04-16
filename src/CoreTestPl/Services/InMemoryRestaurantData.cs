@@ -27,6 +27,11 @@ namespace CoreTestPl.Services
             return newRestaurant;
         }
 
+        public void Comit()
+        {
+            throw new NotImplementedException();
+        }
+
         public Restaurant Get(int id)
         {
             return restaurants.FirstOrDefault(r => r.Id == id);
