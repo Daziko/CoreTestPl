@@ -1,11 +1,13 @@
 ﻿using CoreTestPl.Entities;
 using CoreTestPl.Services;
 using CoreTestPl.WievModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
 namespace CoreTestPl.Controllers
-{
+{ 
+    [Authorize]
     public class HomeController : Controller
     {
         private IRestaurantData restaurantData;
@@ -24,6 +26,8 @@ namespace CoreTestPl.Controllers
             this.restaurantData = restaurantData;
             this.greeter = greeter;   
         }
+
+        [AllowAnonymous]
         public IActionResult Index()
         {
             var model = new HomePageViewModel()

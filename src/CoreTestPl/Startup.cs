@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Routing;
 using CoreTestPl.Services;
 using CoreTestPl.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace CoreTestPl
 {
@@ -38,6 +39,8 @@ namespace CoreTestPl
             services.AddScoped<IRestaurantData, SqlRestaurantData>();
             services.AddMvc();
             services.AddDbContext<OdeToFoodDbContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("OdeToFood")));
+            services.AddIdentity<User, IdentityRole>()
+                    .AddEntityFrameworkStores<OdeToFoodDbContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,7 +75,7 @@ namespace CoreTestPl
 
             app.UseFileServer();
             app.UseMvcWithDefaultRoute();
-
+            app.UseIdentity();
             app.UseMvc(ConfigureRoutes);
 
             //app.Run(async (context) =>
