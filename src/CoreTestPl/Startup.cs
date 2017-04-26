@@ -80,6 +80,7 @@ namespace CoreTestPl
             }
             app.UseCookieAuthentication();
             app.UseFileServer();
+            app.UseNodeModules(env.ContentRootPath);
             app.UseIdentity();
             app.UseMvc(ConfigureRoutes);
 
