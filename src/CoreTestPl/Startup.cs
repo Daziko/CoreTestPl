@@ -74,7 +74,6 @@ namespace CoreTestPl
             }
 
             app.UseFileServer();
-            app.UseMvcWithDefaultRoute();
             app.UseIdentity();
             app.UseMvc(ConfigureRoutes);
 
