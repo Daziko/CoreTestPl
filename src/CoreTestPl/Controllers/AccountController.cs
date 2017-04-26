@@ -48,5 +48,39 @@ namespace CoreTestPl.Controllers
             }
             return View();
         }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> LogOut()
+        {
+            await signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var loginResult = await signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
+
+                if (loginResult.Succeeded)
+                {
+                    if (Url.IsLocalUrl(model.ReturnUrl))
+                    {
+                        return Redirect(model.ReturnUrl);
+                    }
+                    return RedirectToAction("Index", "Home");
+                }
+                
+                ModelState.AddModelError("", "Couldn't login");
+            }
+            return View();
+        }
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,8 +35,14 @@ namespace CoreTestPl
             services.AddScoped<IRestaurantData, SqlRestaurantData>();
             services.AddMvc();
             services.AddDbContext<OdeToFoodDbContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("OdeToFood")));
-            services.AddIdentity<User, IdentityRole>()
+            services.AddIdentity<User, IdentityRole>(o => {
+                    o.Cookies.ApplicationCookie.AutomaticChallenge = true; })
                     .AddEntityFrameworkStores<OdeToFoodDbContext>();
+            services.Configure<CookieAuthenticationOptions>(o =>
+            {
+                o.LoginPath = "/Account/Login";
+                o.AutomaticChallenge = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,6 +61,10 @@ namespace CoreTestPl
                     context.Request.Path = "/Home";
                     await next();
                 }
+                else if (context.Response.StatusCode == 401)
+                {
+                    context.Response.StatusCode = 302;
+                }
             });
 
             if (env.IsDevelopment())
@@ -72,7 +78,7 @@ namespace CoreTestPl
                     ExceptionHandler = context => context.Response.WriteAsync("Error")
                 });
             }
-
+            app.UseCookieAuthentication();
             app.UseFileServer();
             app.UseIdentity();
             app.UseMvc(ConfigureRoutes);

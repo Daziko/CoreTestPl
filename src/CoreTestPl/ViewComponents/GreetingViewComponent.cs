@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace CoreTestPl.ViewComponents
+namespace CoreTestPl.WievModels
 {
     public class GreetingViewComponent : ViewComponent
     {
